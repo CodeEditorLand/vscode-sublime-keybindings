@@ -1,5 +1,4 @@
 out
 dist
-.DS_Store
 .vscode-test
 *.vsix
