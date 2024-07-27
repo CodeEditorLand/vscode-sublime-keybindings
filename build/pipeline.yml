@@ -1,38 +1,38 @@
 name: $(Date:yyyyMMdd)$(Rev:.r)
 
 trigger:
-  branches:
-    include:
-      - main
+    branches:
+        include:
+            - main
 pr: none
 
 resources:
-  repositories:
-    - repository: templates
-      type: github
-      name: microsoft/vscode-engineering
-      ref: main
-      endpoint: Monaco
+    repositories:
+        - repository: templates
+          type: github
+          name: microsoft/vscode-engineering
+          ref: main
+          endpoint: Monaco
 
 parameters:
-  - name: publishExtension
-    displayName: 🚀 Publish Extension
-    type: boolean
-    default: false
+    - name: publishExtension
+      displayName: 🚀 Publish Extension
+      type: boolean
+      default: false
 
 extends:
-  template: azure-pipelines/extension/stable.yml@templates
-  parameters:
-    publishExtension: ${{ parameters.publishExtension }}
+    template: azure-pipelines/extension/stable.yml@templates
+    parameters:
+        publishExtension: ${{ parameters.publishExtension }}
 
-    l10nSourcePaths: ./src
+        l10nSourcePaths: ./src
 
-    buildSteps:
-      - script: npm ci
-        displayName: Install dependencies
+        buildSteps:
+            - script: npm ci
+              displayName: Install dependencies
 
-    tsa:
-      config:
-        areaPath: 'Visual Studio Code Keybinding Extensions'
-        serviceTreeID: 'b43346cb-06b1-4256-97a5-9aaa18eaff90'
-      enabled: true
+        tsa:
+            config:
+                areaPath: "Visual Studio Code Keybinding Extensions"
+                serviceTreeID: "b43346cb-06b1-4256-97a5-9aaa18eaff90"
+            enabled: true
