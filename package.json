@@ -527,15 +527,15 @@
 		}
 	},
 	"dependencies": {
-		"relaxed-json": "^1.0.3"
+		"relaxed-json": "1.0.3"
 	},
 	"description": "Import Sublime Text settings and keybindings into VS Code.",
 	"devDependencies": {
-		"@types/glob": "^8.1.0",
-		"@types/node": "^22.7.5",
-		"@types/relaxed-json": "^1.0.4",
-		"glob": "^11.0.0",
-		"ts-loader": "^9.5.1"
+		"@types/glob": "8.1.0",
+		"@types/node": "22.7.5",
+		"@types/relaxed-json": "1.0.4",
+		"glob": "11.0.0",
+		"ts-loader": "9.5.1"
 	},
 	"displayName": "Sublime Text Keymap and Settings Importer",
 	"extensionKind": [
