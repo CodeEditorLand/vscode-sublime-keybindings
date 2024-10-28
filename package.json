@@ -532,7 +532,7 @@
 	"description": "Import Sublime Text settings and keybindings into VS Code.",
 	"devDependencies": {
 		"@types/glob": "8.1.0",
-		"@types/node": "22.7.9",
+		"@types/node": "22.8.1",
 		"@types/relaxed-json": "1.0.4",
 		"glob": "11.0.0",
 		"ts-loader": "9.5.1"
