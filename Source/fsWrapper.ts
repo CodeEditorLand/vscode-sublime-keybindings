@@ -3,6 +3,7 @@ import * as fs from "fs";
 export async function pathExists(stringPath: string): Promise<boolean> {
 	try {
 		await fsAccess(stringPath, fs.constants.F_OK);
+
 		return true;
 	} catch (e) {
 		return false;

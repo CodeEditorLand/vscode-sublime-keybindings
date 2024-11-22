@@ -19,6 +19,7 @@ interface IConfigCheck {
 
 interface IMapperSettings {
 	mappings: { [key: string]: any };
+
 	defaults: VscodeSetting[];
 }
 export class Mapper {
@@ -31,7 +32,9 @@ export class Mapper {
 		sublimeSettings: string,
 	): Promise<CategorizedSettings> {
 		const settingsMappings = await this.getSettings();
+
 		let parsedSublimeSettings;
+
 		try {
 			parsedSublimeSettings = rjson.parse(sublimeSettings);
 		} catch (e) {
@@ -40,6 +43,7 @@ export class Mapper {
 					"The sublime settings file could not be parsed. Please check if it contains syntax errors.",
 				),
 			);
+
 			throw e;
 		}
 		return this.mapAllSettings(settingsMappings, parsedSublimeSettings);
@@ -73,6 +77,7 @@ export class Mapper {
 		sublimeSettings: { [key: string]: any },
 	): CategorizedSettings {
 		const analyzedSettings: CategorizedSettings = new CategorizedSettings();
+
 		const config = this.mockConfig || vscode.workspace.getConfiguration();
 
 		for (const sublimeKey of Object.keys(sublimeSettings)) {
@@ -80,15 +85,18 @@ export class Mapper {
 				name: sublimeKey,
 				value: sublimeSettings[sublimeKey],
 			};
+
 			const vscodeSetting = this.mapSetting(
 				sublimeSetting,
 				settings.mappings[sublimeKey],
 			);
+
 			if (vscodeSetting) {
 				const configTest = this.checkWithExistingSettings(
 					vscodeSetting,
 					config,
 				);
+
 				const mappedSetting = new MappedSetting(
 					sublimeSetting,
 					vscodeSetting,
@@ -120,7 +128,9 @@ export class Mapper {
 		config: vscode.WorkspaceConfiguration,
 	): IConfigCheck {
 		const returnVal = { alreadyExists: false, existingValue: "" };
+
 		const info = config.inspect(vscodeSetting.name);
+
 		if (info && info.globalValue !== undefined) {
 			if (info.globalValue === vscodeSetting.value) {
 				returnVal.alreadyExists = true;
@@ -200,6 +210,7 @@ export class Mapper {
 				return new VscodeSetting(mappedValue, sublimeSetting.value);
 			} else if (typeof mappedValue === "object") {
 				const obj = mappedValue[sublimeSetting.value];
+
 				if (!obj) {
 					vscode.window.showErrorMessage(
 						vscode.l10n.t({
@@ -211,11 +222,15 @@ export class Mapper {
 							],
 						}),
 					);
+
 					return undefined;
 				}
 				const keys = Object.keys(obj);
+
 				const newKey = keys[0];
+
 				const newValue = obj[newKey];
+
 				return new VscodeSetting(newKey, newValue);
 			}
 		}

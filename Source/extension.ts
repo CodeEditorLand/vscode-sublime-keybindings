@@ -22,7 +22,9 @@ export async function activate(
 			start(),
 		),
 	);
+
 	const hasPrompted = context.globalState.get("alreadyPrompted") || false;
+
 	if (!hasPrompted) {
 		await showPrompt();
 		await context.globalState.update("alreadyPrompted", true);
@@ -31,7 +33,9 @@ export async function activate(
 
 async function showPrompt(): Promise<void> {
 	const yes = vscode.l10n.t("Yes");
+
 	const no = vscode.l10n.t("No");
+
 	const answer: string | undefined =
 		await vscode.window.showInformationMessage(
 			vscode.l10n.t(
@@ -40,6 +44,7 @@ async function showPrompt(): Promise<void> {
 			yes,
 			no,
 		);
+
 	if (answer && answer === yes) {
 		start();
 	}
@@ -47,6 +52,7 @@ async function showPrompt(): Promise<void> {
 
 async function start(): Promise<void> {
 	const categorizedSettings = await getCategorizedSettings();
+
 	if (categorizedSettings) {
 		if (
 			categorizedSettings.mappedSettings.length ||
@@ -54,6 +60,7 @@ async function start(): Promise<void> {
 		) {
 			const selectedSettings: VscodeSetting[] =
 				await showPicker(categorizedSettings);
+
 			if (selectedSettings && selectedSettings.length) {
 				await importSettings(selectedSettings);
 				await vscode.commands.executeCommand(
@@ -72,6 +79,7 @@ async function start(): Promise<void> {
 
 async function getCategorizedSettings(): Promise<CategorizedSettings | null> {
 	const settingsPath = await getSublimeFolderPath();
+
 	if (settingsPath) {
 		return getSettings(settingsPath);
 	}
@@ -81,6 +89,7 @@ async function getCategorizedSettings(): Promise<CategorizedSettings | null> {
 async function getSublimeFolderPath(): Promise<string | undefined> {
 	const sublimeSettingsPath =
 		await sublimeFolderFinder.getExistingDefaultPaths();
+
 	if (sublimeSettingsPath) {
 		return sublimeSettingsPath.fsPath;
 	}
@@ -100,17 +109,21 @@ async function browsePrompt(msg: string): Promise<string | undefined> {
 		msg,
 		vscode.l10n.t("Browse..."),
 	);
+
 	if (!result) {
 		return undefined;
 	}
 	const sublimeSettingsFiles = await vscode.window.showOpenDialog({
 		canSelectFiles: true,
 	});
+
 	if (!sublimeSettingsFiles || !sublimeSettingsFiles.length) {
 		return undefined;
 	}
 	const filePath = sublimeSettingsFiles[0].fsPath;
+
 	const isValidFilePath = await validate(filePath);
+
 	if (isValidFilePath) {
 		return filePath;
 	} else {
@@ -124,6 +137,7 @@ async function browsePrompt(msg: string): Promise<string | undefined> {
 				comment: ["{0} is a filename, {1} is a path"],
 			}),
 		);
+
 		return undefined;
 	}
 }
@@ -141,6 +155,7 @@ async function getSettings(
 		await mapper.getMappedSettings(
 			await readFileAsync(sublimeSettingsPath, "utf-8"),
 		);
+
 	settings.mappedSettings.sort((a, b) => {
 		if (a.vscode.overwritesValue && b.vscode.overwritesValue) {
 			return a.sublime.name.localeCompare(b.sublime.name);
@@ -151,6 +166,7 @@ async function getSettings(
 		}
 		return a.sublime.name.localeCompare(b.sublime.name);
 	});
+
 	return settings;
 }
 
@@ -216,9 +232,12 @@ async function importSettings(settings: ISetting[]): Promise<void> {
 		},
 		async (progress) => {
 			progress.report({ increment: 0 });
+
 			const incrementSize = 100.0 / settings.length;
+
 			const config: vscode.WorkspaceConfiguration =
 				vscode.workspace.getConfiguration();
+
 			for (const setting of settings) {
 				try {
 					await config.update(
@@ -232,6 +251,7 @@ async function importSettings(settings: ISetting[]): Promise<void> {
 					});
 				} catch (e: any) {
 					vscode.window.showErrorMessage(e.message);
+
 					return;
 				}
 			}

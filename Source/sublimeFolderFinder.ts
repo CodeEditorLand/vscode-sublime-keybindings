@@ -35,6 +35,7 @@ export async function getExistingDefaultPaths(): Promise<
 	vscode.Uri | undefined
 > {
 	const foundPaths = await getOSDefaultPaths();
+
 	if (!foundPaths.length) {
 		return undefined;
 	}
@@ -43,10 +44,13 @@ export async function getExistingDefaultPaths(): Promise<
 
 export function getOSDefaultPaths(): string[] {
 	const platform: NodeJS.Platform = os.platform();
+
 	const foundPaths: string[] | undefined =
 		defaultSublimeSettingsPaths.get(platform);
+
 	if (!foundPaths) {
 		console.error("OS could not be identified. No default paths provided.");
+
 		return [];
 	}
 	return foundPaths;
@@ -57,6 +61,7 @@ export async function filterForExistingDirsAsync(
 ): Promise<vscode.Uri | undefined> {
 	for (const p of paths) {
 		const settingsPath: string = path.resolve(p, settingsSubfoldersPath);
+
 		if (await fileSystem.pathExists(settingsPath)) {
 			return vscode.Uri.file(settingsPath);
 		}
