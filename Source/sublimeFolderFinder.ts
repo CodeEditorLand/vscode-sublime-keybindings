@@ -39,6 +39,7 @@ export async function getExistingDefaultPaths(): Promise<
 	if (!foundPaths.length) {
 		return undefined;
 	}
+
 	return filterForExistingDirsAsync(foundPaths);
 }
 
@@ -53,6 +54,7 @@ export function getOSDefaultPaths(): string[] {
 
 		return [];
 	}
+
 	return foundPaths;
 }
 

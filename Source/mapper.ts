@@ -46,6 +46,7 @@ export class Mapper {
 
 			throw e;
 		}
+
 		return this.mapAllSettings(settingsMappings, parsedSublimeSettings);
 	}
 
@@ -62,6 +63,7 @@ export class Mapper {
 					"utf-8",
 				),
 			]);
+
 			this.settings = {
 				mappings: rjson.parse(mappingsFile),
 				defaults: (rjson.parse(defaultsFile) as [[string, any]]).map(
@@ -69,6 +71,7 @@ export class Mapper {
 				),
 			};
 		}
+
 		return this.settings;
 	}
 
@@ -110,12 +113,14 @@ export class Mapper {
 							configTest.existingValue,
 						); // setting with same key but different value exists
 					}
+
 					analyzedSettings.mappedSettings.push(mappedSetting);
 				}
 			} else {
 				analyzedSettings.noMappings.push(sublimeSetting);
 			}
 		}
+
 		return this.appendDefaultSublimeSettings(
 			analyzedSettings,
 			settings.defaults,
@@ -141,6 +146,7 @@ export class Mapper {
 						: String(info.globalValue);
 			}
 		}
+
 		return returnVal;
 	}
 
@@ -183,6 +189,7 @@ export class Mapper {
 				if (configTest.existingValue) {
 					defaultSetting.markAsOverride(configTest.existingValue);
 				}
+
 				settings.defaultSettings.push(defaultSetting);
 			}
 		});
@@ -195,6 +202,7 @@ export class Mapper {
 			} else if (b.overwritesValue) {
 				return -1;
 			}
+
 			return a.name.localeCompare(b.name);
 		});
 
@@ -225,6 +233,7 @@ export class Mapper {
 
 					return undefined;
 				}
+
 				const keys = Object.keys(obj);
 
 				const newKey = keys[0];

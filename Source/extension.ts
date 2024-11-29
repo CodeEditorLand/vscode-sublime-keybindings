@@ -17,6 +17,7 @@ export async function activate(
 	context: vscode.ExtensionContext,
 ): Promise<void> {
 	context.globalState.setKeysForSync(["alreadyPrompted"]);
+
 	context.subscriptions.push(
 		vscode.commands.registerCommand("extension.importFromSublime", () =>
 			start(),
@@ -27,6 +28,7 @@ export async function activate(
 
 	if (!hasPrompted) {
 		await showPrompt();
+
 		await context.globalState.update("alreadyPrompted", true);
 	}
 }
@@ -63,6 +65,7 @@ async function start(): Promise<void> {
 
 			if (selectedSettings && selectedSettings.length) {
 				await importSettings(selectedSettings);
+
 				await vscode.commands.executeCommand(
 					"workbench.action.openGlobalSettings",
 				);
@@ -83,6 +86,7 @@ async function getCategorizedSettings(): Promise<CategorizedSettings | null> {
 	if (settingsPath) {
 		return getSettings(settingsPath);
 	}
+
 	return null;
 }
 
@@ -93,6 +97,7 @@ async function getSublimeFolderPath(): Promise<string | undefined> {
 	if (sublimeSettingsPath) {
 		return sublimeSettingsPath.fsPath;
 	}
+
 	return await browsePrompt(
 		vscode.l10n.t(
 			"No Sublime settings file found at the default location: {0}",
@@ -113,6 +118,7 @@ async function browsePrompt(msg: string): Promise<string | undefined> {
 	if (!result) {
 		return undefined;
 	}
+
 	const sublimeSettingsFiles = await vscode.window.showOpenDialog({
 		canSelectFiles: true,
 	});
@@ -120,6 +126,7 @@ async function browsePrompt(msg: string): Promise<string | undefined> {
 	if (!sublimeSettingsFiles || !sublimeSettingsFiles.length) {
 		return undefined;
 	}
+
 	const filePath = sublimeSettingsFiles[0].fsPath;
 
 	const isValidFilePath = await validate(filePath);
@@ -164,6 +171,7 @@ async function getSettings(
 		} else if (b.vscode.overwritesValue) {
 			return 1;
 		}
+
 		return a.sublime.name.localeCompare(b.sublime.name);
 	});
 
@@ -245,6 +253,7 @@ async function importSettings(settings: ISetting[]): Promise<void> {
 						setting.value,
 						vscode.ConfigurationTarget.Global,
 					);
+
 					progress.report({
 						increment: incrementSize,
 						message: setting.name,
